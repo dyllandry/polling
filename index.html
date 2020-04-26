@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Polling</title>
+    <style>
+        .columns {
+            display: flex;
+        }
+
+        .column {
+            width: 200px;
+            border: 1px solid black;
+            padding: 6px;
+        }
+    </style>
+</head>
+<body>
+    <div class="columns">
+        <div class="column">
+            <div>Polling</div>
+            <div><i>every 3 seconds</i></div>
+            <ol id="polling-list">
+            </ol>
+        </div>
+        <div class="column">
+            <div>Long Polling</div>
+            <button onclick="longPoll()" id="long-poll-button">Poll</button>
+            <ol id="long-polling-list">
+            </ol>
+        </div>
+    </div>
+    <script>
+        const pollingList = document.querySelector('#polling-list')
+        const longPollingList = document.querySelector('#long-polling-list')
+        const longPollStatus = document.querySelector('#long-poll-status')
+        const longPollButton = document.querySelector('#long-poll-button')
+
+        // Set polling interval.
+        setInterval(async function () {
+            const data = await fetch('/polling', { method: 'post' }).then(
+                response => response.json()
+            ) 
+            const li = document.createElement('li')
+            const date = new Date()
+            const time = `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`
+            li.textContent = `[${time}] ${data}`
+            pollingList.appendChild(li)
+        }, 3000)
+
+        let longPollPending = false
+
+        async function longPoll () {
+            longPollButton.textContent = 'polling...'
+            longPollButton.disabled = true
+            const data = await fetch('/long-polling', { method: 'post' }).then(
+                response => response.json()
+            ) 
+
+            const li = document.createElement('li')
+            const date = new Date()
+            const time = `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`
+            li.textContent = `[${time}] ${data}`
+            longPollingList.appendChild(li)
+            longPollButton.textContent = 'poll'
+            longPollButton.disabled = false
+        }
+    </script>
+</body>
+</html>

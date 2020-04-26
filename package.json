@@ -1,0 +1,15 @@
+{
+  "name": "polling",
+  "version": "1.0.0",
+  "description": "A barebones demonstration of polling and long polling.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Dylan Landry",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
